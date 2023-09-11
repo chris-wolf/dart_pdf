@@ -120,6 +120,10 @@ class PdfPrintAction extends StatelessWidget {
     LayoutCallback build,
     PdfPageFormat pageFormat,
   ) async {
+    if (PdfPreview.staticActionAllowed != null && !(await PdfPreview.staticActionAllowed!())) {
+      return;
+    }
+
     final data = PdfPreviewController.of(context);
 
     try {
@@ -206,6 +210,10 @@ class PdfShareAction extends StatelessWidget with PdfPreviewActionBounds {
     LayoutCallback build,
     PdfPageFormat pageFormat,
   ) async {
+    if (PdfPreview.staticActionAllowed != null && !(await PdfPreview.staticActionAllowed!())) {
+      return;
+    }
+
     final bytes = await build(pageFormat);
 
     final result = await Printing.sharePdf(
