@@ -32,10 +32,11 @@ export 'page.dart' show PdfPreviewPageData;
 /// Flutter widget that uses the rasterized pdf pages to display a document.
 class PdfPreview extends StatefulWidget {
   /// Show a pdf document built on demand
-  const PdfPreview({
+   PdfPreview({
     super.key,
     required this.build,
-    this.initialPageFormat,
+     this.actionAllowed,
+     this.initialPageFormat,
     this.allowPrinting = true,
     this.allowSharing = true,
     this.maxPageWidth,
@@ -66,9 +67,16 @@ class PdfPreview extends StatefulWidget {
     this.actionBarTheme = const PdfActionBarTheme(),
     this.enableScrollToPage = false,
     this.onZoomChanged,
-  }) : _pagesBuilder = null;
+  }) : _pagesBuilder = null {
+PdfPreview.staticActionAllowed = actionAllowed;
+}
+   final Future<bool> Function()? actionAllowed;
+   static  Future<bool> Function()? staticActionAllowed;
 
-  /// Build a custom layout.
+
+
+
+   /// Build a custom layout.
   ///
   /// ```dart
   /// PdfPreview.builder(
