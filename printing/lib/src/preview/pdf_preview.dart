@@ -70,7 +70,7 @@ class PdfPreview extends StatefulWidget {
   }) : _pagesBuilder = null {
 PdfPreview.staticActionAllowed = actionAllowed;
 }
-   final Future<bool> Function()? actionAllowed;
+    Future<bool> Function()? actionAllowed;
    static  Future<bool> Function()? staticActionAllowed;
 
 
