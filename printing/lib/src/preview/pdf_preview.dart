@@ -33,7 +33,7 @@ export 'page.dart' show PdfPreviewPageData;
 class PdfPreview extends StatefulWidget {
   /// Show a pdf document built on demand
 
-  const PdfPreview({
+  PdfPreview({
     Key? key,
     required this.build,
      this.actionAllowed,
