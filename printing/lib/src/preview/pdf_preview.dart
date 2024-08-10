@@ -77,7 +77,7 @@ PdfPreview.staticActionAllowed = actionAllowed;
 
 
 
-   /// Build a custom layout.
+  /// Build a custom layout.
   ///
   /// ```dart
   /// PdfPreview.builder(
@@ -101,7 +101,7 @@ PdfPreview.staticActionAllowed = actionAllowed;
   /// )
   /// ```
   const PdfPreview.builder({
-    Key? key,
+    super.key,
     required this.build,
     this.initialPageFormat,
     this.allowPrinting = true,
@@ -135,8 +135,7 @@ PdfPreview.staticActionAllowed = actionAllowed;
     required CustomPdfPagesBuilder pagesBuilder,
     this.enableScrollToPage = false,
     this.onZoomChanged,
-  })  : _pagesBuilder = pagesBuilder,
-        super(key: key);
+  }) : _pagesBuilder = pagesBuilder;
 
   static const _defaultPageFormats = <String, PdfPageFormat>{
     'A4': PdfPageFormat.a4,
@@ -349,29 +348,40 @@ class PdfPreviewState extends State<PdfPreview> {
     final actions = <Widget>[];
 
     if (widget.useActions && widget.allowPrinting && info?.canPrint == true) {
-      actions.add(PdfPrintAction(
-        jobName: widget.pdfFileName,
-        dynamicLayout: widget.dynamicLayout,
-        onPrinted:
-            widget.onPrinted == null ? null : () => widget.onPrinted!(context),
-        onPrintError: widget.onPrintError == null
-            ? null
-            : (dynamic error) => widget.onPrintError!(context, error),
-      ));
+      actions.add(
+        PdfPrintAction(
+          jobName: widget.pdfFileName,
+          dynamicLayout: widget.dynamicLayout,
+          onPrinted: widget.onPrinted == null
+              ? null
+              : () => widget.onPrinted!(context),
+          onPrintError: widget.onPrintError == null
+              ? null
+              : (dynamic error) => widget.onPrintError!(context, error),
+        ),
+      );
     }
 
     if (widget.useActions && widget.allowSharing && info?.canShare == true) {
-      actions.add(PdfShareAction(
-        filename: widget.pdfFileName,
-        onShared:
-            widget.onPrinted == null ? null : () => widget.onPrinted!(context),
-      ));
+      actions.add(
+        PdfShareAction(
+          filename: widget.pdfFileName,
+          onShared: widget.onPrinted == null
+              ? null
+              : () => widget.onPrinted!(context),
+          subject: widget.shareActionExtraSubject,
+          emails: widget.shareActionExtraEmails,
+          body: widget.shareActionExtraBody,
+        ),
+      );
     }
 
     if (widget.useActions && widget.canChangePageFormat) {
-      actions.add(PdfPageFormatAction(
-        pageFormats: widget.pageFormats,
-      ));
+      actions.add(
+        PdfPageFormatAction(
+          pageFormats: widget.pageFormats,
+        ),
+      );
     }
 
     if (widget.useActions && widget.canChangeOrientation) {
@@ -406,27 +416,29 @@ class PdfPreviewState extends State<PdfPreview> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            child: Builder(builder: (context) {
-              final controller = PdfPreviewController.listen(context);
-              return PdfPreviewCustom(
-                key: previewWidget,
-                build: controller.buildDocument,
-                loadingWidget: widget.loadingWidget,
-                maxPageWidth: widget.maxPageWidth,
-                onError: widget.onError,
-                padding: widget.padding,
-                pageFormat: controller.pageFormat,
-                pages: widget.pages,
-                pdfPreviewPageDecoration: widget.pdfPreviewPageDecoration,
-                previewPageMargin: widget.previewPageMargin,
-                scrollViewDecoration: widget.scrollViewDecoration,
-                shouldRepaint: widget.shouldRepaint,
-                pagesBuilder: widget._pagesBuilder,
-                dpi: widget.dpi,
-                enableScrollToPage: widget.enableScrollToPage,
-                onZoomChanged: widget.onZoomChanged,
-              );
-            }),
+            child: Builder(
+              builder: (context) {
+                final controller = PdfPreviewController.listen(context);
+                return PdfPreviewCustom(
+                  key: previewWidget,
+                  build: controller.buildDocument,
+                  loadingWidget: widget.loadingWidget,
+                  maxPageWidth: widget.maxPageWidth,
+                  onError: widget.onError,
+                  padding: widget.padding,
+                  pageFormat: controller.pageFormat,
+                  pages: widget.pages,
+                  pdfPreviewPageDecoration: widget.pdfPreviewPageDecoration,
+                  previewPageMargin: widget.previewPageMargin,
+                  scrollViewDecoration: widget.scrollViewDecoration,
+                  shouldRepaint: widget.shouldRepaint,
+                  pagesBuilder: widget._pagesBuilder,
+                  dpi: widget.dpi,
+                  enableScrollToPage: widget.enableScrollToPage,
+                  onZoomChanged: widget.onZoomChanged,
+                );
+              },
+            ),
           ),
           if (actions.isNotEmpty)
             IconTheme.merge(
