@@ -66,7 +66,14 @@ class PdfPreview extends StatefulWidget {
     this.actionBarTheme = const PdfActionBarTheme(),
     this.enableScrollToPage = false,
     this.onZoomChanged,
-  }) : _pagesBuilder = null;
+  })  : _pagesBuilder = null,  super(key: key) {
+PdfPreview.staticActionAllowed = actionAllowed;
+}
+    Future<bool> Function()? actionAllowed;
+   static  Future<bool> Function()? staticActionAllowed;
+
+
+
 
   /// Build a custom layout.
   ///
